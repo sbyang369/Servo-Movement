@@ -12,15 +12,10 @@
 #define wrist 2
 #define gripper 3
 
-#define baseReset 0
 #define armReset 135
 #define wristReset 90
 #define gripperReset 0 
 
-#define baseHarvest 90
-#define armHarvest 65
-#define wristHarvest 0 
-#define gripperHarvest 210
 
 
 // Create an instance of the PCA9685 driver
@@ -30,44 +25,50 @@ void setup() {
   Serial.begin(115200);
   Serial.println("Starting...");
 
-  Wire.begin(I2C_SDA, I2C_SCL);
+  Wire.begin(I2C_SDA, I2C_SCL);  // Initialize I2C with specific SDA and SCL pins
   pwm.begin();
-  pwm.setPWMFreq(60); 
+  pwm.setPWMFreq(60);  // Set frequency to 60Hz for servos
   Serial.println("PCA9685 initialized.");
 }
 
 void loop() {
+  delay(5000);
   reset();
-  delay(5000);  // Adjust delay as needed
+  delay(5000);
   harvest();
-
-  //pwm.setPWM(base,0,angleToPulse(90));
-  //pwm.setPWM(arm,0,angleToPulse(65));
-  //pwm.setPWM(wrist,0,angleToPulse(0));
-  //pwm.setPWM(gripper,0,angleToPulse(210));
+  delay(5000);
 }
 
 int angleToPulse(int ang) {
   int pulse = map(ang, 0, 180, SERVOMIN, SERVOMAX);
   Serial.print("Angle: ");
   Serial.print(ang);
+  Serial.print(" -> Pulse: ");
+  Serial.println(pulse);
   return pulse;
 }
 
 void reset() {
-  Serial.print("BEGINNING RESET");
-  pwm.setPWM(base, 0, angleToPulse(baseReset));
+  Serial.println("BEGINNING RESET");
+  pwm.setPWM(base, 0, angleToPulse(90));
+  delay(500);
   pwm.setPWM(arm, 0, angleToPulse(armReset));
+  delay(500);
   pwm.setPWM(wrist, 0, angleToPulse(wristReset));
+  delay(500);
   pwm.setPWM(gripper, 0, angleToPulse(gripperReset));
-  Serial.print("RESET COMPLETE");
+  Serial.println("RESET COMPLETE");
 }
 
 void harvest() {
-  Serial.print("BEGINNING HARVEST");
-  pwm.setPWM(base, 0, angleToPulse(baseHarvest));
-  pwm.setPWM(arm, 0, angleToPulse(armHarvest));
-  pwm.setPWM(wrist, 0, angleToPulse(wristHarvest));
-  pwm.setPWM(gripper, 0, angleToPulse(gripperHarvest));
-  Serial.print("HARVEST COMPLETE");
+  Serial.println("BEGINNING HARVEST");
+  pwm.setPWM(base, 0, angleToPulse(0));
+  delay(1000);
+  pwm.setPWM(arm, 0, angleToPulse(65));
+  delay(1000);
+  pwm.setPWM(wrist, 0, angleToPulse(0));
+  delay(1000);
+  pwm.setPWM(gripper, 0, angleToPulse(210));
+  delay(1000);
+  Serial.println("HARVEST COMPLETE");
 }
