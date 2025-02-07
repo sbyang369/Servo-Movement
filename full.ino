@@ -10,8 +10,7 @@
 #define forearm 1
 #define arm 2
 #define wrist 3
-#define gripper 4
-#define forearm 5
+#define gripper 15
 
 // Create an instance of the PCA9685 driver
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x40, Wire);
@@ -27,8 +26,51 @@ void setup() {
 }
 
 void loop() {
-  delay(5000);
-  reset();
+  //reset in UP position
+  pwm.setPWM(wrist,0,angleToPulse(200)); //YES
+  delay(100);
+  pwm.setPWM(arm, 0, angleToPulse(180)); //YES
+  delay(100);
+  pwm.setPWM(base, 0, angleToPulse(220)); //YES
+  delay(100);
+  pwm.setPWM(gripper, 0, angleToPulse(270));
+  delay(500);
+  Serial.print("ROBOT IS READY AT THIS MOMENT. go adjust the intake!");
+  for (int i = 1; i <= 10; i++) {  // Loop from 1 to 15
+    Serial.println(i);  // Print the current number
+    delay(1000);  // Wait 1 second
+  }
+  Serial.print("START RECORDING");
+  for (int i = 1; i <= 5; i++) {  // Loop from 1 to 15
+    Serial.println(i);  // Print the current number
+    delay(1000);  // Wait 1 second
+  }
+  Serial.print("HURRY AND REPLACE PIXEL!");
+  for (int i = 1; i <= 10; i++) {  // Loop from 1 to 15
+    Serial.println(i);  // Print the current number
+    delay(1000);  // Wait 1 second
+  }
+  pinMode(4, OUTPUT);  // Set GPIO 4 as an output
+  digitalWrite(4, HIGH);  // Turn the LED ON
+
+  //drop down and GRAB
+  pwm.setPWM(arm, 0, angleToPulse(0)); //YES
+  delay(1000);
+  pwm.setPWM(gripper, 0, angleToPulse(0));
+  Serial.print("SHOULD BE GRABBED!");
+  delay(1000);
+
+
+  // lift UP
+  pwm.setPWM(arm,0, angleToPulse(200));
+  delay(2000);
+  pwm.setPWM(base,0, angleToPulse(0));
+  delay(500);
+  pwm.setPWM(gripper,0, angleToPulse(0));
+  Serial.print("SHOULD ALL BE DONE!");
+
+  //delay(10000);
+  //reset();
   //delay(5000);
   //harvest();
 }
@@ -44,7 +86,7 @@ int angleToPulse(int ang) {
 
 void reset() {
   Serial.println("BEGINNING RESET");
-  pwm.setPWM(wrist,0,angleToPulse(0)); //YES
+  pwm.setPWM(wrist,0,angleToPulse(200)); //YES
   delay(500);
 
   pwm.setPWM(arm, 0, angleToPulse(180)); //YES
@@ -62,7 +104,7 @@ void reset() {
 void harvest() {
   Serial.println("BEGINNING HARVEST");
 
-  pwm.setPWM(wrist,0,angleToPulse(0)); //YES
+  pwm.setPWM(wrist,0,angleToPulse(200)); //YES
   delay(500);
 
   pwm.setPWM(arm, 0, angleToPulse(0)); //YES
