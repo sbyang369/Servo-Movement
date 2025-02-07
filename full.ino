@@ -27,11 +27,10 @@ void setup() {
 }
 
 void loop() {
-  //pwm.setPWM(arm,0,angleToPulse(360));
   delay(5000);
   reset();
-  delay(5000);
-  harvest();
+  //delay(5000);
+  //harvest();
 }
 
 int angleToPulse(int ang) {
@@ -54,8 +53,8 @@ void reset() {
   pwm.setPWM(base, 0, angleToPulse(220)); //YES
   delay(500);
 
- // pwm.setPWM(gripper, 0, angleToPulse(0));
- // delay(500);
+  pwm.setPWM(gripper, 0, angleToPulse(270));
+  delay(500);
 
   Serial.println("RESET COMPLETE");
 }
@@ -72,8 +71,8 @@ void harvest() {
   pwm.setPWM(base, 0, angleToPulse(0)); //YES
   delay(500);
 
- // pwm.setPWM(gripper, 0, angleToPulse(210));
- // delay(500);
+  pwm.setPWM(gripper, 0, angleToPulse(0));
+  delay(500);
 
   Serial.println("HARVEST COMPLETE");
 }
